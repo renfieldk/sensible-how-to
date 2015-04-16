@@ -38,14 +38,18 @@ Which then of course means this sensible how-to will break. Sigh, aren't OSX bug
 The first thing we're going to do is run some of the example code, to get an idea of how sensible works.
 The basic theory of sensible is pretty simple.
 Every sensible thing (as in "Web of Things" thing) does two things:
+
 1. DISCOVERY (via what is called the "wrapper" application)
-  * Uses [multicast DNS](http://en.wikipedia.org/wiki/Multicast_DNS) (aka Bonjour on OSX) to:
-   1. Announce it's existence to the network
-   2. Find others on the network
-2. INTERACTION (via what is called the "service" application)
-  * Responds to HTTP requests with HTTP responses with either:
-   1. HTML/Javascript or
-   2. JSON data
+1. INTERACTION (via what is called the "service" application)
+
+Discovery uses [multicast DNS](http://en.wikipedia.org/wiki/Multicast_DNS) (aka Bonjour on OSX) to:
+
+1. Announce it's existence to the network
+1. Find others on the network
+
+Interaction means responding to HTTP requests with HTTP responses with either:
+1. HTML/Javascript or
+1. JSON data
 
 Let's take a look at an example, so that we can match the service names to the code.
 
