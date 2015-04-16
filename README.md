@@ -42,14 +42,13 @@ Every sensible thing (as in "Web of Things" thing) does two things:
 1. DISCOVERY (via what is called the "wrapper" application)
 1. INTERACTION (via what is called the "service" application)
 
-Discovery uses [multicast DNS](http://en.wikipedia.org/wiki/Multicast_DNS) (aka Bonjour on OSX) to:
+_Discovery_ uses [multicast DNS](http://en.wikipedia.org/wiki/Multicast_DNS) (aka Bonjour on OSX) to:
+* Announce it's existence to the network
+* Find others on the network
 
-1. Announce it's existence to the network
-1. Find others on the network
-
-Interaction means responding to HTTP requests with HTTP responses with either:
-1. HTML/Javascript or
-1. JSON data
+_Interaction_ means responding to HTTP requests with HTTP responses with either:
+* HTML/Javascript or
+* JSON data
 
 Let's take a look at an example, so that we can match the service names to the code.
 
