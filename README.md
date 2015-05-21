@@ -74,7 +74,7 @@ First, the jukebox.
 1. Open up your terminal and go to `/sensible/apps/node/jukebox/` by typing<br>
 `cd /sensible/apps/node/jukebox/`
 2. Start up the Jukebox by typing<br>
-`sensible-app.command`
+`./sensible-app.command`
 You should see something like
 ```
 changing directory to /Users/renfield/sensible/apps/node/jukebox
@@ -161,4 +161,70 @@ Now, let's add the mDNS plugin:
 cordova plugins add https://github.com/vstirbu/ZeroConf
 ```
 
-And edit our index.html to use this plugin:
+And edit our index.html and index.js to use this plugin.
+Open index.js in your favorite editor and replace the entire contents of the file with:
+```
+document.addEventListener("deviceready", doit, false);
+
+var type = "_sensible._tcp.local.";
+
+function doit() {
+    ZeroConf.list(type, 3000, success, error);
+}
+
+function success(s) {
+    var res = document.getElementById("result");
+    res.innerHTML = "<cite>" + JSON.stringify(s) + "</cite>";
+}
+
+function error(e) {
+    alert(e);
+}
+```
+
+Save that. Now let's edit www/index.html by replacing the entire file contents with:
+```
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Hello World</title>
+        <!-- Enable all requests, inline styles, and eval() -->
+<meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
+
+    </head>
+    <body>
+        <button onclick="doit();" name="doit button">DOIT</button>
+        <div id="result">
+        </div>
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+    </body>
+</html>
+```
+
+Because this has to connect to the mDNS network, we can't test it via the emulator (emulators run inside a walled-off sandbox on your computer) so we have to install it onto your actual Android phone.
+Make sure your Android phone is in debug mode by doing the following totally intuitive actions:
+1. Open your phone's Settings
+2. Scroll down to "About phone" and tap that
+3. Scroll down to "Build number" and tap that SEVEN TIMES
+4. Go back one two menu levels (or just go back to Settings)
+5. Scroll down to the new menu item "{} Developer options" and tap
+6. Tap on "USB Debugging" and ensure the checkbox is checked
+
+Now plug your phone into your computer via USB and type:
+```
+cordova run android --device
+```
+
+You should see something really lame; a button called DOIT and some text like `{"action":"list","service":[]}`
+
+Now let's fire up that node jukebox (assuming it's not still running):
+1. Open up your terminal and go to `/sensible/apps/node/jukebox/` by typing<br>
+`cd /sensible/apps/node/jukebox/`
+2. Start up the Jukebox by typing<br>
+`./sensible-app.command`
+
+Once the node jukebox has started up, click the DOIT button...BOOM DISCOVERY! Sort of...
+```
+{"action":"list","service":[{"application":"sensible","domain":"local","port":3003,"name":"Jukebox","server":"685b359baaf8.ant.amazon.com.","description":"\\037Main jukebox in the living room","protocol":"tcp","qualifiedname":"Jukebox._sensible._tcp.local.","type":"_sensible._tcp.local.","addresses":[],"urls":[]}]}
+```
